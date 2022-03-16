@@ -5,7 +5,7 @@
         <slot name="form"></slot>
       </div>
     </div>
-    <div v-if="$slots.handler" class="handler">
+    <div v-if="showHander" class="handler">
       <slot name="handler"></slot>
     </div>
   </div>
@@ -29,6 +29,19 @@ export default {
 
   data() {
     return {}
+  },
+
+  computed: {
+    showHander() {
+      if (!this.$slots.handler) return false
+      const { handler = [] } = this.$slots
+      const findItem = handler.find(item => {
+        const { tag, text } = item
+        return tag || text
+      })
+      const hasItem = !!findItem
+      return hasItem
+    },
   },
 
   methods: {},
