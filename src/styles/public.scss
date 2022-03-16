@@ -1,0 +1,195 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*sass定义*/
+/*计算单位函数*/
+@function unit($num) {
+  $scale: 1; //缩放比例
+
+  @return #{if($num == 1, 1, $num * $scale)}px;
+}
+
+/*公共变量*/
+$main: #e63740; //主色
+$bg: #f2f3f5; //背景色
+$orangeBg: #ffe4dd; //橙色背景
+$orange: #ffaa32; //橙色
+$gray: #a5afbc; //灰色
+$lightBlue: #e5f5ff; //浅蓝色
+$padding: 15px; //边距
+$height1: 44px; //常用高度1
+$border1: 1px solid #e8ebee; //常用边框1
+$border2: 1px solid #bbbcc6; //常用边框2，深色
+
+/*公共样式*/
+@mixin overflow {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  word-break: break-all;
+}
+
+@mixin multiLine1 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  word-break: break-all;
+}
+
+@mixin multiLine2 {
+  @include multiLine1;
+  -webkit-line-clamp: 2;
+}
+
+@mixin multiLine3 {
+  @include multiLine1;
+  -webkit-line-clamp: 3;
+}
+
+@mixin shadow1 {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/*头像样式*/
+@mixin portrait($path) {
+  width: 60px;
+  height: 60px;
+  border: $border1;
+  border-radius: 50%;
+  background: url($path+'images/portrait.png') no-repeat center center;
+  background-size: cover;
+}
+
+/*弹窗表格搜索样式*/
+@mixin dialogSearch() {
+  &.radio {
+    ::v-deep .el-table__header {
+      tr:first-of-type {
+        .el-checkbox__input {
+          display: none;
+        }
+      }
+    }
+  }
+  ::v-deep .el-form {
+    display: flex;
+    flex-wrap: wrap;
+    .el-form-item {
+      display: flex;
+      flex: 0 0 33.3333%;
+      max-width: 33.3333%;
+      padding: 0 10px;
+      margin-bottom: 20px;
+      .el-form-item__label {
+        min-width: 130px;
+        text-align: right !important;
+        line-height: 30px !important;
+      }
+      .el-form-item__content {
+        flex: 1;
+        line-height: 0;
+        margin-left: 0 !important;
+      }
+      .el-select,
+      .el-date-editor {
+        width: 100%;
+      }
+    }
+    .handler {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-start;
+      padding: 0 10px;
+      margin-bottom: 20px;
+    }
+  }
+  ::v-deep .el-dialog {
+    margin-top: 5% !important;
+    .el-dialog__body {
+      padding: 0 20px;
+      padding-bottom: 80px;
+      .content {
+        &__end {
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          width: 100%;
+          padding: 0 20px;
+          height: 60px;
+          border-top: $border1;
+          background-color: #fff;
+          position: absolute;
+          left: 0;
+          bottom: 0;
+        }
+      }
+    }
+  }
+  .association-table {
+    &__title {
+      line-height: 30px;
+    }
+    .table-wrap {
+      padding: 0;
+    }
+  }
+}
+
+/*选择成员/选择部门样式*/
+@mixin selectPersonOrDepartment() {
+  position: relative;
+  .el-select {
+    width: 100%;
+    line-height: 28px;
+  }
+  .icon-wrap {
+    width: 30px;
+    height: calc(100% - 5px);
+    background-color: #fff;
+    border-radius: 0 4px 4px 0;
+    position: absolute;
+    top: 3px;
+    right: 1px;
+    z-index: 1000;
+    cursor: pointer;
+    .icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      color: $gray;
+    }
+    &:hover {
+      background-color: $bg;
+    }
+  }
+  ::v-deep .el-select {
+    .el-select__tags {
+      max-width: calc(100% - 50px) !important;
+    }
+    .el-input__inner {
+      padding-right: 65px;
+    }
+    .el-input__suffix {
+      right: 30px;
+    }
+  }
+}
+
+/*quill-editor样式*/
+@mixin quillEditor() {
+  ::v-deep .quill-editor {
+    .ql-picker-label {
+      display: flex;
+      align-items: center;
+    }
+    .ql-tooltip {
+      transform: translate3d(50%, 0px, 0px);
+    }
+    .ql-container {
+      min-height: 200px;
+    }
+  }
+}
