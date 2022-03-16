@@ -52,7 +52,6 @@ export default {
       default: '请选择',
     },
     includeDeleted: {
-      // 是否包含已删除的部门
       type: Boolean,
       default: false,
     },

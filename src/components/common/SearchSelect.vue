@@ -177,12 +177,10 @@ export default {
       default: false,
     },
     includeResign: {
-      // 是否包含离职人员
       type: Boolean,
       default: false,
     },
     includeDeleted: {
-      // 是否包含已删除的部门
       type: Boolean,
       default: false,
     },
