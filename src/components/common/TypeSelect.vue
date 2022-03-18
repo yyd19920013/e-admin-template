@@ -35,18 +35,39 @@ export default {
     type: {
       // 业务类型
       /*
+        bizDomain：业务域
+        productLine：产品线
+        projectProductLine：项目下的产品线
+        department：需求部门
 
+        whether：是否
+        os：操作系统
+        processor：处理器
+        onlineTime：预计上线时间
+        reason：驳回理由
+
+        businessPriority：业务优先级
+        businessStatus：业务需求状态
+        productPriority：产品优先级
+        productStatus：产品需求状态
+        productType：产品需求类型
+        projectPriority：项目优先级
+        projectStatus：项目需求状态
+        projectType：项目需求类型
+        taskStatus：任务状态
+        taskStage：所属阶段
       */
       type: String,
       default: 'priorityBusiness',
     },
     projectId: {
+      // 项目id，type=projectProductLine必填
       type: [Number, String],
       default: '',
     },
     selectedList: {
       // 选中的列表
-      type: [Array, Object, Number, String],
+      type: [Array, Object, Number, String, Boolean],
       default() {
         return []
       },
@@ -77,14 +98,17 @@ export default {
       default: '请选择',
     },
     showDeleted: {
+      // 是否显示被逻辑删除业务域和产品线
       type: Boolean,
       default: false,
     },
     includeDeleteDept: {
+      // 是否包含已删除的部门
       type: Boolean,
       default: false,
     },
     isNewAdd: {
+      // 所在的场景是否是继续新建下一条，新建下一条会重置数据，该参数为true则会重新初始化赋值
       type: Boolean,
       default: false,
     },
@@ -146,7 +170,7 @@ export default {
       }
     },
     __setSelected(selectedList) {
-      if (!selectedList && selectedList !== 0) return
+      if (!selectedList && ![0, false].includes(selectedList)) return
       if (this.type == 'department') {
         if (!['array', 'object'].includes(Type(selectedList))) return
         const selectedArr = [].concat(selectedList)

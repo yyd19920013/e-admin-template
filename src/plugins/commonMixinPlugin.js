@@ -35,7 +35,7 @@ export default {
       },
 
       computed: {
-        ...mapState('user', ['subordinate', 'buttonList']),
+        ...mapState('user', ['subordinate', 'buttonList', 'imagesJson']),
         subordinateName() {
           return this.teamlist.map(item => {
             const { alias, name } = item
@@ -84,7 +84,7 @@ export default {
           if (!targetData || !resData) return
           for (const attr in targetData) {
             const value = resData[attr]
-            if (value || value === 0) {
+            if (value || [0, false].includes(value)) {
               targetData[attr] = value
               if (refs && refs[attr] && refs[attr].__setSelected) {
                 refs[attr].__setSelected(value)
