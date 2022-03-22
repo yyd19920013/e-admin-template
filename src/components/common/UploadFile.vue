@@ -24,6 +24,7 @@
         <div class="row2">文件上传数量限制{{ limit }}个，文件上传大小限制{{ limitSize }}M</div>
       </div>
     </el-upload>
+    <template v-if="readonly && !selfFileList.length">--</template>
     <image-viewer v-if="showViewer" :url-list="urlList" :z-index="999999" :on-close="handleCloseViewer" />
   </div>
 </template>
@@ -229,6 +230,9 @@ export default {
     ::v-deep {
       .el-upload {
         display: none;
+      }
+      .el-upload-list {
+        background-color: #f5f5f5;
       }
       .el-upload-list__item:first-child {
         margin-top: 5px;

@@ -4,18 +4,13 @@
       <el-tab-pane v-for="(item, index) in defineTabs" :key="index" :name="`${index}`">
         <span slot="label">
           {{ item }}
-          <el-tooltip
-            v-show="content"
-            slot="label"
-            :content="content"
-            placement="top"
-          >
+          <el-tooltip v-show="content" slot="label" :content="content" placement="top">
             <i class="el-icon-question"></i>
           </el-tooltip>
         </span>
       </el-tab-pane>
     </el-tabs>
-    <div class="form-wrap">
+    <div v-if="showForm" class="form-wrap">
       <slot name="form"></slot>
     </div>
     <div v-if="showHandler" :class="{ 'button-wrap': true, 'button-wrap--active': spreadActive, 'button-wrap--spread': showSpreadButton }">
@@ -83,6 +78,11 @@ export default {
       type: Boolean,
       default: false,
     },
+    showForm: {
+      // 是否显示表单区域
+      type: Boolean,
+      default: true,
+    },
     showHandler: {
       // 是否显示按钮区域
       type: Boolean,
@@ -103,7 +103,7 @@ export default {
     },
     tabActive(newVal) {
       this.insideTabActive = newVal
-    }
+    },
   },
 
   created() {
@@ -131,6 +131,9 @@ export default {
 .tabs-wrap {
   .el-tabs {
     padding: 0 10px;
+    ::v-deep .is-focus {
+      box-shadow: none !important;
+    }
   }
   .form-wrap {
     padding-top: 10px;
