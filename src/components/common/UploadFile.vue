@@ -239,6 +239,12 @@ export default {
       }
       .el-upload-list__item {
         transition: 0s !important;
+        .el-upload-list__item-name {
+          margin-right: 0;
+        }
+        .el-upload-list__item-status-label {
+          display: none;
+        }
       }
     }
   }

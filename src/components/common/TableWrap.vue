@@ -18,7 +18,7 @@
             :label="item.label"
             :prop="item.prop"
             :min-width="item.width"
-            :fixed="item.fixed"
+            :fixed="index == 0 || (index == 1 && !defineTable[0].label) ? 'left' : item.fixed"
             :type="isElType(item.type) ? item.type : ''"
             :show-overflow-tooltip="getShowOverflowTooltip(item)"
             :align="item.handleList && item.handleList.length ? 'center' : 'left'"
@@ -252,7 +252,7 @@ export default {
       })
     },
     handleSizeChange(val) {
-      console.log('handleSizeChange', val)
+      // console.log('handleSizeChange', val)
       this.$emit(
         'update:requestParams',
         Object.assign({}, this.requestParams, {
@@ -317,6 +317,10 @@ export default {
         padding-top: 100px;
         background: url('../../assets/images/empty.png') no-repeat center 20px;
         background-size: auto 100px;
+      }
+      .el-table__fixed-right::before,
+      .el-table__fixed::before {
+        display: none;
       }
     }
     .handle-list {
