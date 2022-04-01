@@ -12,6 +12,7 @@
 /*公共变量*/
 $main: #e63740; //主色
 $bg: #f2f3f5; //背景色
+$blue: #1063f1; //蓝色
 $orangeBg: #ffe4dd; //橙色背景
 $orange: #ffaa32; //橙色
 $gray: #a5afbc; //灰色
@@ -133,6 +134,48 @@ $border2: 1px solid #bbbcc6; //常用边框2，深色
     }
     .table-wrap {
       padding: 0;
+    }
+  }
+}
+
+@mixin handleDialog() {
+  ::v-deep .handleDialog {
+    .el-dialog__body {
+      padding: 20px 40px;
+      padding-top: 0;
+    }
+    .content {
+      .main {
+        .el-form-item {
+          display: flex;
+          flex-direction: column;
+          min-width: 100%;
+          .el-form-item__label {
+            text-align: left;
+          }
+          .el-select {
+            width: 100%;
+          }
+          .hint {
+            &--orange,
+            &--gray {
+              padding: 5px 0;
+              line-height: 20px;
+              font-size: 12px;
+            }
+            &--orange {
+              color: $orange;
+            }
+            &--gray {
+              color: $gray;
+            }
+          }
+        }
+      }
+    }
+    .end {
+      display: flex;
+      justify-content: flex-end;
     }
   }
 }

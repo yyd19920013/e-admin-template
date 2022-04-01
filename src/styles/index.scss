@@ -622,6 +622,10 @@ body,
 }
 
 /*element-ui组件样式修改*/
+//解决number类型输入中文后光标上移
+input[type='number'].el-input__inner {
+  line-height: 1px !important;
+}
 .el-loading-mask {
   background-color: transparent !important;
 }
@@ -657,8 +661,28 @@ body,
     width: 16px !important;
   }
 }
+.el-form-item__label {
+  color: #888;
+}
 .el-select-dropdown {
   max-width: 500px;
+}
+.el-step__head.is-success {
+  color: #e63740;
+  border-color: #e63740;
+}
+.el-step__title.is-success {
+  color: #e63740;
+}
+.el-steps .currentStep .is-status:before {
+  content: '\e794';
+}
+.el-step__head.is-process {
+  color: #c0c4cc;
+  border-color: #c0c4cc;
+}
+.el-step__title.is-process {
+  color: #c0c4cc;
 }
 .pagination {
   padding-top: 50px;
