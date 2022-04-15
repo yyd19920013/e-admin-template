@@ -22,6 +22,7 @@
             :type="isElType(item.type) ? item.type : ''"
             :show-overflow-tooltip="getShowOverflowTooltip(item)"
             :align="item.handleList && item.handleList.length ? 'center' : 'left'"
+            :render-header="item.renderHeader"
           >
             <template v-if="!isElType(item.type)" #default="scope">
               <template v-if="!item.__hideCol || !scope.row.__hidden">
