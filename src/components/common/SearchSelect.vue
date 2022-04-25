@@ -325,9 +325,9 @@ export default {
       })
     },
     searchByKeyword() {
-      if (!this.keyword.trim()) return
       clearTimeout(this.searchTimer)
       this.searchTimer = setTimeout(async () => {
+        if (!this.keyword.trim()) return
         const { keyword, includeResign } = this
         const api = this.businessType == 'person' ? this.$services.searchByKeyword : this.searchByKeywordDepartment
         const res = await api({ keyword, includeResign })
