@@ -325,6 +325,7 @@ export default {
       })
     },
     searchByKeyword() {
+      this.afterDataList = []
       clearTimeout(this.searchTimer)
       this.searchTimer = setTimeout(async () => {
         if (!this.keyword.trim()) return
