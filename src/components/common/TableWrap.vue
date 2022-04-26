@@ -52,7 +52,20 @@
                     type="text"
                     @click="item.click && item.click({ row: scope.row, index: scope.$index })"
                   >
-                    {{ item.text }}
+                    <span
+                      class="button__inner"
+                      :style="item.styleFn ? item.styleFn({ row: scope.row, index: scope.$index, filters: filters }) : item.style"
+                    >
+                      <template v-if="item.custom">
+                        {{ getDefaultResult(item.custom({ row: scope.row, index: scope.$index, filters: filters })) }}
+                      </template>
+                      <template v-else-if="item.prop">
+                        {{ getDefaultResult(scope.row[item.prop]) }}
+                      </template>
+                      <template v-else>
+                        {{ item.text }}
+                      </template>
+                    </span>
                   </el-button>
                   <div v-else-if="item.type == 'switch'" class="switch-wrap">
                     <el-switch v-model="scope.row[item.model]" />
@@ -297,6 +310,9 @@ export default {
         th,
         td {
           padding: 5px 0;
+          .el-button--text {
+            color: #1063f1;
+          }
         }
       }
       .el-table--border::after,
