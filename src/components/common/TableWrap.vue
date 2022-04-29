@@ -302,6 +302,15 @@ export default {
 
 .table-wrap {
   padding: 0 10px;
+  &.hidden-selection {
+    ::v-deep {
+      .el-table-column--selection {
+        .el-checkbox {
+          display: none;
+        }
+      }
+    }
+  }
   .table {
     border: 1px solid #ebeef5;
     ::v-deep {
