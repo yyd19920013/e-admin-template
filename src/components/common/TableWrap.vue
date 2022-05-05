@@ -17,6 +17,7 @@
             :key="index"
             :label="item.label"
             :prop="item.prop"
+            :width="item.Width"
             :min-width="item.width"
             :fixed="index == 0 || (index == 1 && !defineTable[0].label) ? 'left' : item.fixed"
             :type="isElType(item.type) ? item.type : ''"
