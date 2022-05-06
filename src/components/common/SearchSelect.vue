@@ -177,10 +177,12 @@ export default {
       default: false,
     },
     includeResign: {
+      // 是否包含离职人员
       type: Boolean,
       default: false,
     },
     includeDeleted: {
+      // 是否包含已删除的部门
       type: Boolean,
       default: false,
     },
@@ -188,6 +190,11 @@ export default {
       // 是否必选值，必选值为空则不关闭弹窗并提示
       type: Boolean,
       default: false,
+    },
+    closeAfterConfirm: {
+      // 点击确认之后是否关闭弹窗
+      type: Boolean,
+      default: true,
     },
   },
 
@@ -483,12 +490,12 @@ export default {
       this.$emit('selected-change', checkedList)
       if (this.required) {
         if (hasValue) {
-          this.dialogClose()
+          this.closeAfterConfirm && this.dialogClose()
         } else {
           this.alerts(`请选择${this.textJson.resultTitle}`)
         }
       } else {
-        this.dialogClose()
+        this.closeAfterConfirm && this.dialogClose()
       }
     },
   },
