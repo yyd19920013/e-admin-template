@@ -188,7 +188,7 @@ export default {
       const { fileName, downloadUrl } = data
       if (!downloadUrl) return console.log('无图片预览地址')
       const lastIndex = fileName.lastIndexOf('.')
-      const suffix = fileName.substring(lastIndex + 1)
+      const suffix = fileName.substring(lastIndex + 1).toLowerCase()
       if (fileType(suffix) != 'image') {
         const isConfirm = await this.isConfirm('仅支持图片预览，是否下载该文件？')
         if (!isConfirm) return
