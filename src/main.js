@@ -12,9 +12,11 @@ import router from './router'
 import * as filters from './filters'
 import services from 'services'
 import commonMixinPlugin from './plugins/commonMixinPlugin'
+import commonDirectivePlugin from './plugins/commonDirectivePlugin'
 import { LoadingChunkErrorReload } from './utils/utils'
 
 Vue.use(commonMixinPlugin)
+Vue.use(commonDirectivePlugin)
 // set ElementUI lang to EN
 // Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
