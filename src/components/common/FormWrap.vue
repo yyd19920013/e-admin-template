@@ -67,6 +67,13 @@ export default {
           }
         }
       }
+      > .el-form-item.required.is-required {
+        .el-form-item__label {
+          &::before {
+            display: inline;
+          }
+        }
+      }
     }
   }
   ::v-deep .form {
@@ -170,6 +177,12 @@ export default {
               max-width: 33.3333%;
             }
           }
+          &.four-col {
+            .el-form-item {
+              flex: 0 0 25%;
+              max-width: 25%;
+            }
+          }
         }
       }
     }
@@ -185,7 +198,7 @@ export default {
     text-align: center;
     overflow: hidden;
     .el-checkbox {
-      float: right;
+      float: left;
     }
   }
   ::v-deep {
@@ -209,6 +222,18 @@ export default {
       }
       &__row2 {
         font-size: 12px;
+      }
+      &__hint {
+        &--orange {
+          font-size: 14px;
+          font-weight: normal;
+          color: $orange;
+        }
+        &--gray {
+          font-size: 14px;
+          font-weight: normal;
+          color: $gray;
+        }
       }
     }
   }
