@@ -94,6 +94,7 @@ export default {
         padding-bottom: 20px;
         .text-wrap {
           display: flex;
+          flex-wrap: wrap;
           width: 100%;
           .el-form-item {
             flex: 1;
