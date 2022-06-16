@@ -159,6 +159,7 @@ export default {
               }
             }
           }
+          .el-cascader,
           .el-select,
           .el-date-editor {
             width: 100%;
