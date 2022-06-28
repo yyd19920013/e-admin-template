@@ -29,9 +29,8 @@
   </div>
 </template>
 <script>
-import { bind, unbind, getPasteFile, fileType } from 'utils/utils'
+import { bind, unbind, getPasteFile, fileType, copyJson } from 'utils/utils'
 import ImageViewer from './ImageViewer.vue'
-import { copyJson } from '@/utils/utils'
 
 export default {
   /*
