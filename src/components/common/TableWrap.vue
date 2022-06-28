@@ -27,8 +27,20 @@
           >
             <template v-if="!isElType(item.type)" #default="scope">
               <template v-if="!item.__hideCol || !scope.row.__hidden">
+                <el-tooltip v-if="item.tip && item.tip({ row: scope.row, index: scope.$index, filters: filters })" placement="top">
+                  <span class="tooltip-text">{{ item.tip({ row: scope.row, index: scope.$index, filters: filters }) }}</span>
+                  <template v-if="item.getTips" slot="content">
+                    <div
+                      v-for="(item1, index1) in item.getTips({ row: scope.row, index: scope.$index, filters: filters })"
+                      :key="`tips-${index}-${index1}`"
+                      class="tip-content__item"
+                    >
+                      {{ item1 }}
+                    </div>
+                  </template>
+                </el-tooltip>
                 <div v-if="item.handleList" class="handle-list">
-                  <div v-for="(item1, index1) in item.handleList" :key="index1">
+                  <div v-for="(item1, index1) in item.handleList" :key="`handleList-${index}-${index1}`">
                     <div
                       v-if="!item1.render || (item1.render && item1.render({ row: scope.row, index: scope.$index }))"
                       class="handle-item"
@@ -322,6 +334,10 @@ export default {
           padding: 5px 0;
           .el-button--text {
             color: #1063f1;
+          }
+          .tooltip-text {
+            color: $main;
+            cursor: pointer;
           }
         }
       }
