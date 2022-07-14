@@ -19,7 +19,7 @@
             :prop="item.prop"
             :width="item.Width"
             :min-width="item.width"
-            :fixed="index == 0 || (index == 1 && !defineTable[0].label) ? 'left' : item.fixed"
+            :fixed="getFixed(item, index)"
             :type="isElType(item.type) ? item.type : ''"
             :show-overflow-tooltip="getShowOverflowTooltip(item)"
             :align="item.handleList && item.handleList.length ? 'center' : 'left'"
@@ -232,6 +232,17 @@ export default {
   },
 
   methods: {
+    getFixed(item, index) {
+      const { defineTable } = this
+      const { fixed } = item
+      const defaultFixedLeft = index == 0 || (index == 1 && !defineTable[0].label)
+
+      if (fixed !== undefined) {
+        return fixed
+      } else if (defaultFixedLeft) {
+        return 'left'
+      }
+    },
     getDefaultResult(result) {
       return result || result === 0 ? result : '--'
     },
@@ -332,6 +343,9 @@ export default {
         th,
         td {
           padding: 5px 0;
+          .cell {
+            line-height: 32px;
+          }
           .el-button--text {
             color: #1063f1;
           }
