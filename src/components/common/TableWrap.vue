@@ -63,22 +63,18 @@
                   <el-button
                     v-if="item.type == 'button'"
                     type="text"
+                    :style="item.styleFn ? item.styleFn({ row: scope.row, index: scope.$index, filters: filters }) : item.style"
                     @click="item.click && item.click({ row: scope.row, index: scope.$index })"
                   >
-                    <span
-                      class="button__inner"
-                      :style="item.styleFn ? item.styleFn({ row: scope.row, index: scope.$index, filters: filters }) : item.style"
-                    >
-                      <template v-if="item.custom">
-                        {{ getDefaultResult(item.custom({ row: scope.row, index: scope.$index, filters: filters })) }}
-                      </template>
-                      <template v-else-if="item.prop">
-                        {{ getDefaultResult(scope.row[item.prop]) }}
-                      </template>
-                      <template v-else>
-                        {{ item.text }}
-                      </template>
-                    </span>
+                    <template v-if="item.custom">
+                      {{ getDefaultResult(item.custom({ row: scope.row, index: scope.$index, filters: filters })) }}
+                    </template>
+                    <template v-else-if="item.prop">
+                      {{ getDefaultResult(scope.row[item.prop]) }}
+                    </template>
+                    <template v-else>
+                      {{ item.text }}
+                    </template>
                   </el-button>
                   <div v-else-if="item.type == 'switch'" class="switch-wrap">
                     <el-switch v-model="scope.row[item.model]" />
