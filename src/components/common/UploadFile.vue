@@ -103,7 +103,7 @@ export default {
       this.selfFileList = []
     },
     __setFileList(fileList) {
-      const mapFileList = (fileList ?? []).map(item => {
+      const mapFileList = (fileList ?? []).map((item) => {
         const { fileName: name } = item
         return {
           name,
@@ -117,7 +117,7 @@ export default {
     repeatFileRename(fileList = []) {
       const nameCountJson = {}
 
-      return fileList.map(item => {
+      return fileList.map((item) => {
         const { name } = item
         const lastIndex = name.lastIndexOf('.')
         const suffix = ~lastIndex ? name.substring(lastIndex) : ''
@@ -134,7 +134,7 @@ export default {
       })
     },
     async uploadFile(file) {
-      if (this.selfFileList.length >= 20) {
+      if (this.selfFileList.length >= this.limit) {
         this.handleExceed()
         return
       }
@@ -153,7 +153,7 @@ export default {
     },
     getFile(ev) {
       if (this.disabled) return
-      getPasteFile(ev, async file => {
+      getPasteFile(ev, async (file) => {
         // console.log(file)
         const isConfirm = await this.isConfirm(`从剪切板中读取到了文件${file.name}，是否确定上传？`)
         if (!isConfirm) return
@@ -173,7 +173,7 @@ export default {
       return isLt
     },
     handleSuccess(response, file, fileList) {
-      this.selfFileList = this.selfFileList.filter(item => item.response)
+      this.selfFileList = this.selfFileList.filter((item) => item.response)
     },
     handleRemove(file, fileList) {
       this.selfFileList = this.repeatFileRename(fileList)
