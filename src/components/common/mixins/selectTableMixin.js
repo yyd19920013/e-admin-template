@@ -1,29 +1,69 @@
+import { copyJson } from '@/utils/utils'
+
 export default {
   data() {
     return {
       visible: false,
       selectedListPaging: [],
+      linkedIds: [],
+      loaded: false,
     }
   },
 
   watch: {
     tableDataDialog() {
+      this.setLinkedIds()
       this.setCurrentPageSelected()
     },
   },
 
   methods: {
+    __clearSelected(clearTableData = false) {
+      if (clearTableData) this.tableData = []
+      const { tableWrapDialog = {} } = this.$refs || {}
+      const { elTable } = tableWrapDialog.$refs || {}
+      if (!elTable) return
+      elTable.clearSelection()
+      this.selectedListPaging = []
+      this.linkedIds = []
+      this.loaded = false
+    },
+    __getSelectedTableData() {
+      return copyJson(this.tableData)
+    },
+    getSelectedList() {
+      return copyJson(this.selectedListPaging)
+    },
+    getLinkedIds() {
+      return copyJson(this.linkedIds)
+    },
+    setLinkedIds() {
+      if (!this.tableDataDialog[0] || this.loaded) return
+      const [firstItem] = this.tableDataDialog || []
+      const linkedIds = firstItem?.linkedIds ?? []
+      this.linkedIds = linkedIds.map(item => `${item}`)
+      this.loaded = true
+    },
+    getSelectedIdsAndLinkedIds() {
+      const selectedList = this.getSelectedList()
+      const selectedIds = selectedList.map(item => item.id)
+      const linkedIds = this.getLinkedIds()
+      const allIds = [...selectedIds, ...linkedIds]
+      const result = Array.from(new Set(allIds))
+      return result
+    },
     handleTableSelectedChange(selectedList, selectedItem) {
       if (this.type == 'checkbox') {
-        const { pageNum } = this.requestParams || this.formDialog
-        this.selectedListPaging[pageNum] = selectedList
+        const copySelectedList = copyJson(selectedList)
+        this.selectedListPaging = copySelectedList
       } else {
         const { tableWrapDialog = {} } = this.$refs || {}
         const { elTable } = tableWrapDialog.$refs || {}
         if (!elTable) return
+        const copySelectedItem = copyJson(selectedItem)
         elTable.clearSelection()
         elTable.toggleRowSelection(selectedItem, true)
-        this.selectedListPaging = [selectedItem]
+        this.selectedListPaging = [copySelectedItem]
       }
     },
     showDialogFn(show = false) {
@@ -35,41 +75,28 @@ export default {
     closeDialog() {
       this.showDialogFn()
     },
-    getSelectedList() {
-      return this.selectedListPaging.filter(item => item).flat(1)
-    },
     setCurrentPageSelected() {
       this.$nextTick(() => {
         const { tableWrapDialog = {} } = this.$refs || {}
         const { elTable } = tableWrapDialog.$refs || {}
         if (!elTable) return
-        const selectedList = this.getSelectedList()
-        // console.log('setCurrentPageSelected', this.tableDataDialog, this.selectedListPaging, selectedList)
-        elTable.clearSelection()
-        this.tableDataDialog.forEach(row => {
-          const item = selectedList.find(selectedItem => selectedItem.id == row.id)
-          elTable.toggleRowSelection(row, !!item)
-        })
+        if (this.linkedIds.length) {
+          this.tableDataDialog.forEach(row => {
+            const posIndex = this.linkedIds.indexOf(row.id)
+            if (~posIndex) {
+              elTable.toggleRowSelection(row, true)
+              this.linkedIds.splice(posIndex, 1)
+            }
+          })
+        }
       })
     },
     deleteListPaging(id) {
-      if (this.type == 'checkbox') {
-        this.selectedListPaging.findIndex((arr, arrIndex) => {
-          if (arr) {
-            return arr.findIndex((item, index) => {
-              if (item.id == id) {
-                this.selectedListPaging[arrIndex].splice(index, 1)
-                return true
-              }
-            })
-          } else {
-            return false
-          }
-        })
-      } else {
-        const findIndex = this.selectedListPaging.findIndex(item => item.id == id)
-        this.selectedListPaging.splice(findIndex, 1)
-      }
+      const { tableWrapDialog = {} } = this.$refs || {}
+      const { elTable } = tableWrapDialog.$refs || {}
+      if (!elTable) return
+      const findItem = elTable.selection.find(item => item.id === id)
+      elTable.toggleRowSelection(findItem, false)
     },
   },
 }
