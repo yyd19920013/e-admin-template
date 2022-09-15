@@ -15,6 +15,10 @@ import commonMixinPlugin from './plugins/commonMixinPlugin'
 import commonDirectivePlugin from './plugins/commonDirectivePlugin'
 import { LoadingChunkErrorReload } from './utils/utils'
 
+// 默认Dialog组件点击Modal不关闭弹窗
+ElementUI.Dialog.props.closeOnClickModal.default = false
+ElementUI.MessageBox.setDefaults({ closeOnClickModal: false })
+
 Vue.use(commonMixinPlugin)
 Vue.use(commonDirectivePlugin)
 // set ElementUI lang to EN
