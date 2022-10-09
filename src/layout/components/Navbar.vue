@@ -2,10 +2,7 @@
   <div class="navbar">
     <div class="navbar-wrap">
       <div class="left">
-        <div class="left__logo">
-          <slot></slot>
-          <!-- <img :src="require('images/logo.png')" alt="log" @click="toHome" /> -->
-        </div>
+        <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
         <div class="left__title">
           <breadcrumb class="breadcrumb-container" />
         </div>
@@ -18,8 +15,22 @@
             <i class="el-icon-arrow-down"></i>
           </div>
           <el-dropdown-menu slot="dropdown" class="user-dropdown">
-            <el-dropdown-item @click.native="logout">
-              <span style="display:block;">退出</span>
+            <el-dropdown-item :style="itemsCenter" @click.native="logout">
+              <i class="el-icon-switch-button"></i>
+              <span>退出登录</span>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <el-dropdown v-if="showOpenUrl" class="handler-container" trigger="hover">
+          <i class="el-icon-more"></i>
+          <el-dropdown-menu slot="dropdown" class="user-dropdown">
+            <el-dropdown-item :style="itemsCenter" @click.native="open">
+              <i class="el-icon-monitor"></i>
+              <span>在浏览器打开</span>
+            </el-dropdown-item>
+            <el-dropdown-item v-clipboard:copy="openUrl" v-clipboard:success="onCopy" v-clipboard:error="onError" :style="itemsCenter">
+              <i class="el-icon-link"></i>
+              <span>复制链接</span>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -29,18 +40,35 @@
 </template>
 <script>
 import Breadcrumb from 'src/components/Breadcrumb'
+import Hamburger from 'src/components/Hamburger'
 import { mapState, mapGetters, mapMutations } from 'vuex'
-import { sStore, cookie } from '@/utils/utils'
-
+import { sStore, cookie, isDingTalk } from '@/utils/utils'
 export default {
   components: {
     Breadcrumb,
+    Hamburger,
+  },
+  data() {
+    const showOpenUrl = isDingTalk()
+    return {
+      showOpenUrl,
+      openUrl: location.href,
+      itemsCenter: {
+        display: 'flex',
+        alignItems: 'center',
+      },
+    }
   },
   computed: {
     ...mapState('user', ['userInfo']),
     ...mapGetters(['sidebar']),
     avatar() {
       return ''
+    },
+  },
+  watch: {
+    $route(newVal) {
+      this.openUrl = location.href
     },
   },
   methods: {
@@ -56,6 +84,15 @@ export default {
       cookie.clear()
       this.CHANGE_USERINFO({})
       location.href = this.$services.userOut()
+    },
+    open() {
+      window.open(this.openUrl)
+    },
+    onCopy(e) {
+      this.alerts('复制成功', 'success')
+    },
+    onError(e) {
+      this.alerts('复制失败')
     },
   },
 }
@@ -73,27 +110,25 @@ export default {
     position: relative;
     background: #fff;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-    position: fixed;
+    position: absolute;
     left: 0;
     top: 0;
     z-index: 1999;
     .hamburger-container {
-      line-height: 46px;
-      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 !important;
+      margin-left: 20px;
+      height: 40px;
+      line-height: 40px;
       float: left;
       cursor: pointer;
       transition: background 0.3s;
       -webkit-tap-highlight-color: transparent;
-
-      &:hover {
-        background: rgba(0, 0, 0, 0.025);
-      }
     }
-
     .breadcrumb-container {
       float: left;
     }
-
     .left {
       display: flex;
       align-items: center;
@@ -110,16 +145,14 @@ export default {
         position: relative;
       }
     }
-
     .right-menu {
+      display: flex;
+      align-items: center;
       float: right;
       padding-right: 30px;
-      height: 100%;
-      line-height: $navbarHeight;
       &:focus {
         outline: none;
       }
-
       .right-menu-item {
         display: inline-block;
         padding: 0 8px;
@@ -127,17 +160,14 @@ export default {
         font-size: 18px;
         color: #5a5e66;
         vertical-align: text-bottom;
-
         &.hover-effect {
           cursor: pointer;
           transition: background 0.3s;
-
           &:hover {
             background: rgba(0, 0, 0, 0.025);
           }
         }
       }
-
       .avatar-container {
         .avatar-wrapper {
           display: flex;
@@ -153,7 +183,6 @@ export default {
             padding-left: 8px;
             padding-right: 4px;
           }
-
           .el-icon-caret-bottom {
             cursor: pointer;
             position: absolute;
@@ -162,6 +191,10 @@ export default {
             font-size: 12px;
           }
         }
+      }
+      .handler-container {
+        margin-left: 15px;
+        cursor: pointer;
       }
     }
   }

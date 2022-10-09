@@ -59,15 +59,15 @@ import vm from 'src/main'
 function ajaxWrap(config) {
   var str = ''
   var errorPromise = {
-    then: function() {
+    then: function () {
       console.error('这是一个无效的then函数，如果要使用promise方式，不要在config对象里配置success、error、finally函数')
       return this
     },
-    catch: function() {
+    catch: function () {
       console.error('这是一个无效的catch函数，如果要使用promise方式，不要在config对象里配置success、error、finally函数')
       return this
     },
-    finally: function() {
+    finally: function () {
       console.error('这是一个无效的finally函数，如果要使用promise方式，不要在config对象里配置success、error、finally函数')
       return this
     },
@@ -197,8 +197,8 @@ function ajaxWrap(config) {
 
     return errorPromise
   } else {
-    return new Promise(function(resolve, reject) {
-      xhr.onreadystatechange = function() {
+    return new Promise(function (resolve, reject) {
+      xhr.onreadystatechange = function () {
         onreadystatechangeFn(resolve, reject)
       }
     })
@@ -303,15 +303,15 @@ function axiosWrap(config) {
   var hostname = window.location.hostname
   var all = config.all
   var errorPromise = {
-    then: function() {
+    then: function () {
       console.error('这是一个无效的then函数，如果要使用promise方式，不要在config对象里配置success、error、finally函数')
       return this
     },
-    catch: function() {
+    catch: function () {
       console.error('这是一个无效的catch函数，如果要使用promise方式，不要在config对象里配置success、error、finally函数')
       return this
     },
-    finally: function() {
+    finally: function () {
       console.error('这是一个无效的finally函数，如果要使用promise方式，不要在config对象里配置success、error、finally函数')
       return this
     },
@@ -323,7 +323,7 @@ function axiosWrap(config) {
     try {
       var store = import('store')
 
-      store.then(data => {
+      store.then((data) => {
         data.default.commit({
           type: 'UPDATE_LOADINGSTATUS',
           isLoading: bool,
@@ -336,7 +336,7 @@ function axiosWrap(config) {
     try {
       var store = import('store')
 
-      store.then(data => {
+      store.then((data) => {
         data.default.commit({
           type: 'SHOW_REFRESH_BT',
           showRefreshBt: bool,
@@ -362,14 +362,14 @@ function axiosWrap(config) {
       timeout: config.timeout || 20000,
       responseType: config.responseType || 'json', //默认值是json，可选项 'arraybuffer', 'blob', 'document', 'json', 'text', 'stream'
       withCredentials: config.withCredentials || false, //跨域请求时发送Cookie
-      cancelToken: new CANCEL_TOKEN(cancel => {
+      cancelToken: new CANCEL_TOKEN((cancel) => {
         if (config.noInterrupt) return
         Vue.prototype.$httpRequestList && Vue.prototype.$httpRequestList.push(cancel)
       }),
-      onUploadProgress: function(ev) {
+      onUploadProgress: function (ev) {
         config.upFn && config.upFn(ev)
       },
-      onDownloadProgress: function(ev) {
+      onDownloadProgress: function (ev) {
         config.downFn && config.downFn(ev)
       },
     }
@@ -377,7 +377,7 @@ function axiosWrap(config) {
 
     function axiosResultFn(resolve, reject) {
       axiosFn
-        .then(function(res) {
+        .then(function (res) {
           var data = res.data
 
           if (res.status == 200) {
@@ -413,7 +413,7 @@ function axiosWrap(config) {
                 try {
                   var store = import('store')
 
-                  store.then(storeData => {
+                  store.then((storeData) => {
                     storeData.default.commit('user/CHANGE_USERINFO', {})
                   })
                 } catch (e) {}
@@ -437,7 +437,7 @@ function axiosWrap(config) {
             }
           }
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error)
           changeLoading(false)
           if (error.response) {
@@ -465,7 +465,7 @@ function axiosWrap(config) {
       axiosResultFn()
       return errorPromise
     } else {
-      return new Promise(function(resolve, reject) {
+      return new Promise(function (resolve, reject) {
         axiosResultFn(resolve, reject)
       })
     }
@@ -481,7 +481,7 @@ function axiosWrap(config) {
     }
 
     function axiosAllResultFn(resolve, reject) {
-      Promise.all(apisArr).then(function() {
+      Promise.all(apisArr).then(function () {
         if (resolve && Type(resolve) == 'function') {
           return resolve(arguments[0])
         } else {
@@ -494,7 +494,7 @@ function axiosWrap(config) {
       axiosAllResultFn()
       return errorPromise
     } else {
-      return new Promise(function(resolve, reject) {
+      return new Promise(function (resolve, reject) {
         axiosAllResultFn(resolve, reject)
       })
     }
@@ -588,7 +588,7 @@ function Socket() {
   return this
 }
 Socket.prototype = {
-  init: function(options) {
+  init: function (options) {
     this.options = options
     this.timeout = options.timeout || 5000
     this.timeout1 = options.timeout1 || 10000
@@ -597,28 +597,28 @@ Socket.prototype = {
 
     return this
   },
-  reconect: function() {
+  reconect: function () {
     var This = this
 
     function start() {
       This.ws = new WebSocket(This.options.url)
 
-      bind(This.ws, 'open', function(res) {
+      bind(This.ws, 'open', function (res) {
         This.heartbeat()
         This.pubSend()
       })
 
-      bind(This.ws, 'message', function(res) {
+      bind(This.ws, 'message', function (res) {
         This.heartbeat()
         This.pubSend()
       })
 
-      bind(This.ws, 'close', function(res) {
+      bind(This.ws, 'close', function (res) {
         This.reconect()
         This.resend = true
       })
 
-      bind(This.ws, 'error', function(res) {
+      bind(This.ws, 'error', function (res) {
         This.reconect()
         This.resend = true
       })
@@ -636,8 +636,8 @@ Socket.prototype = {
 
     return this
   },
-  messageFn: function(key, successFn, finallyFn) {
-    return function(res) {
+  messageFn: function (key, successFn, finallyFn) {
+    return function (res) {
       var data = null
 
       try {
@@ -651,18 +651,18 @@ Socket.prototype = {
       }
     }
   },
-  heartbeat: function() {
+  heartbeat: function () {
     var This = this
 
     if (!This.timer1) {
       clearTimeout(This.timer1)
       clearTimeout(This.timer2)
 
-      This.timer1 = setTimeout(function() {
+      This.timer1 = setTimeout(function () {
         This.timer1 = null
         This.options.heartbeatJson && This.ws && This.ws.send(JSON.stringify(This.options.heartbeatJson))
         if (!This.ws || This.ws.readyState != 1) {
-          This.timer2 = setTimeout(function() {
+          This.timer2 = setTimeout(function () {
             This.ws && This.ws.close()
           }, This.timeout2)
         }
@@ -670,7 +670,7 @@ Socket.prototype = {
     }
     return this
   },
-  pubSend: function() {
+  pubSend: function () {
     if (this.resend) {
       this.resend = false
       this.paramsJson = copyJson(this.deleteParamsJson)
@@ -686,7 +686,7 @@ Socket.prototype = {
       }
     }
   },
-  send: function(params, successFn, finallyFn, intervalSendFn) {
+  send: function (params, successFn, finallyFn, intervalSendFn) {
     //send函数中的params指定reqToken（注意在别重复）时，可以给clearOne传reqToken取消订阅该业务的函数，否则clearOne只能取消最后一个订阅函数
     var This = this
     var key = params.reqToken || soleString32()
@@ -704,7 +704,7 @@ Socket.prototype = {
     }
 
     intervalSendFn &&
-      intervalSendFn(function() {
+      intervalSendFn(function () {
         This.ws.send(params)
       })
 
@@ -713,18 +713,18 @@ Socket.prototype = {
 
     return this
   },
-  open: function() {
+  open: function () {
     this.onOff = true
     this.reconect()
     return this
   },
-  close: function() {
+  close: function () {
     this.onOff = false
     this.ws && this.ws.close()
     this.ws = null
     return this
   },
-  clearOne: function(reqToken) {
+  clearOne: function (reqToken) {
     //send函数中的params指定reqToken（注意在别重复）时，可以给clearOne传reqToken取消订阅该业务的函数，否则clearOne只能取消最后一个订阅函数
     var key = reqToken || this.keyArr.pop()
 
@@ -735,13 +735,13 @@ Socket.prototype = {
     }
     return this
   },
-  clearAll: function() {
+  clearAll: function () {
     for (var attr in this.messageFnJson) {
       this.clearOne()
     }
     return this
   },
-  logState: function(str) {
+  logState: function (str) {
     console.log(str, 'ws.readyState：' + this.ws.readyState)
     return this
   },
@@ -977,7 +977,7 @@ function yydTimer(fn, msec) {
       }
       lastT = parseInt(time) % msec
 
-      clear = function() {
+      clear = function () {
         cancelAnimationFrame(id)
       }
 
@@ -985,16 +985,16 @@ function yydTimer(fn, msec) {
     }
     id = animate(0)
   } else {
-    id = setInterval(function() {
+    id = setInterval(function () {
       fn && fn(clear, id)
     }, msec)
 
-    clear = function() {
+    clear = function () {
       clearInterval(id)
     }
   }
 
-  window.onhashchange = function() {
+  window.onhashchange = function () {
     clear()
   }
 }
@@ -1007,7 +1007,7 @@ function bind(obj, evname, fn) {
       obj.addEventListener('DOMMouseScroll', fn, false)
     }
   } else {
-    obj.attachEvent('on' + evname, function() {
+    obj.attachEvent('on' + evname, function () {
       fn.call(obj)
     })
   }
@@ -1046,13 +1046,13 @@ function pDef(ev) {
 
 //网络处理
 function networkHandle(onlineFn, offlineFn) {
-  window.onoffline = function() {
+  window.onoffline = function () {
     alerts('网络已断开！')
     offlineFn && offlineFn()
   }
-  window.ononline = function() {
+  window.ononline = function () {
     alerts('网络已连接！')
-    setTimeout(function() {
+    setTimeout(function () {
       webviewRefresh()
     }, 3000)
     onlineFn && onlineFn()
@@ -1063,7 +1063,7 @@ function networkHandle(onlineFn, offlineFn) {
 //arr(数组里面选定的都不输出)
 function consoleNull(arr) {
   for (var i = 0; i < arr.length; i++) {
-    window.console[arr[i]] = function() {}
+    window.console[arr[i]] = function () {}
   }
 }
 
@@ -1084,7 +1084,7 @@ function openMoblieDebug(whiteList) {
 
       oScript.id = '//cdn.jsdelivr.net/npm/eruda'
       oScript.src = '//cdn.jsdelivr.net/npm/eruda'
-      oScript.onload = function() {
+      oScript.onload = function () {
         eruda.init()
       }
       document.body.appendChild(oScript)
@@ -1096,7 +1096,7 @@ function openMoblieDebug(whiteList) {
 
     count++
     if (!timer) {
-      timer = setTimeout(function() {
+      timer = setTimeout(function () {
         if (count >= 5) {
           unbind(document, 'click', openJudgeFn)
           openFn()
@@ -1129,7 +1129,7 @@ function autoEvent(obj, event) {
 //自定义事件的实现
 var customEvent = {
   json: {},
-  on: function(evName, fn) {
+  on: function (evName, fn) {
     if (Type(this.json[evName]) != 'object') {
       this.json[evName] = {}
     }
@@ -1139,7 +1139,7 @@ var customEvent = {
     }
     return this
   },
-  emit: function(evName, data) {
+  emit: function (evName, data) {
     var evFnArr = this.json[evName]
 
     if (Type(evFnArr) == 'object') {
@@ -1151,7 +1151,7 @@ var customEvent = {
     }
     return this
   },
-  remove: function(evName, fn) {
+  remove: function (evName, fn) {
     var evFnArr = this.json[evName]
 
     if (Type(evName) == 'string' && Type(evFnArr) == 'object') {
@@ -1186,7 +1186,7 @@ function soleString32() {
   resultStr += timestamp
 
   resultStr = resultStr.split('')
-  resultStr.sort(function(a, b) {
+  resultStr.sort(function (a, b) {
     return Math.random() - 0.5
   })
   resultStr = resultStr.join('')
@@ -1346,13 +1346,13 @@ var idCardNo = {
   }, //省,直辖市代码
   powers: ['7', '9', '10', '5', '8', '4', '2', '1', '6', '3', '7', '9', '10', '5', '8', '4', '2'], //每位加权因子
   lastCodes: ['1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2'], //第18位校检码
-  normalIdCardNo: function(idCardNo) {
+  normalIdCardNo: function (idCardNo) {
     //格式化15身份证号码为18位
     var id17 = idCardNo.substring(0, 6) + '19' + idCardNo.substring(6)
 
     return idCardNo.length == 15 ? id17 + this.getLastCode(id17) : idCardNo
   },
-  getLastCode: function(idCardNo) {
+  getLastCode: function (idCardNo) {
     //根据身份证前17位计算出最后一位校检码
     var idCardNo = this.normalIdCardNo(idCardNo)
     var id17 = idCardNo.substring(0, 17)
@@ -1367,7 +1367,7 @@ var idCardNo = {
 
     return this.lastCodes[codeIndex]
   },
-  getIdCardNoInfo: function(idCardNo) {
+  getIdCardNoInfo: function (idCardNo) {
     //获取身份证信息
     var idCardNo = this.normalIdCardNo(idCardNo)
     var cityCode = idCardNo.substring(0, 2)
@@ -1392,7 +1392,7 @@ var idCardNo = {
 
     return this.checkIdCardNo(idCardNo) ? idCardNoInfo : this.getIdCardNoCheckInfo(idCardNo)
   },
-  checkAddressCode: function(idCardNo) {
+  checkAddressCode: function (idCardNo) {
     //检查地址码
     var idCardNo = this.normalIdCardNo(idCardNo)
     var addressCode = idCardNo.substring(0, 6)
@@ -1400,7 +1400,7 @@ var idCardNo = {
 
     return reg.test(addressCode) && this.citys[addressCode.substring(0, 2)] ? true : false
   },
-  checkDobCode: function(idCardNo) {
+  checkDobCode: function (idCardNo) {
     //检查日期码
     var idCardNo = this.normalIdCardNo(idCardNo)
     var dobCode = idCardNo.substring(6, 14)
@@ -1416,14 +1416,14 @@ var idCardNo = {
 
     return reg.test(dobCode) && bDate <= oDate && cYear == bYear && cMonth == bMonth && cDay == bDay ? true : false
   },
-  checkLastCode: function(idCardNo) {
+  checkLastCode: function (idCardNo) {
     //检查身份证最后一位校验码
     var idCardNo = this.normalIdCardNo(idCardNo)
     var lastCode = idCardNo.charAt(idCardNo.length - 1)
 
     return lastCode == this.getLastCode(idCardNo) ? true : false
   },
-  getIdCardNoCheckInfo: function(idCardNo) {
+  getIdCardNoCheckInfo: function (idCardNo) {
     //获取身份证号码校验信息
     var regTestResult = /^[1-8]\d{5}[1-9]\d{3}(0[1-9]|1[0-2])(0[1-9]|[1-2]\d|3[0-1])\d{3}[\dxX]$/.test(idCardNo)
     var idCardNo = this.normalIdCardNo(idCardNo)
@@ -1432,10 +1432,10 @@ var idCardNo = {
     var result = ~posIndex ? posIndex : true
     var msgJson = {
       '-1': '身份证号码校验通过',
-      '0': '身份证号码格式校验不通过',
-      '1': '地址码校验不通过',
-      '2': '日期码校验不通过',
-      '3': '最后一位校验码校验不通过',
+      0: '身份证号码格式校验不通过',
+      1: '地址码校验不通过',
+      2: '日期码校验不通过',
+      3: '最后一位校验码校验不通过',
     }
 
     return {
@@ -1444,7 +1444,7 @@ var idCardNo = {
       msg: msgJson[posIndex],
     }
   },
-  checkIdCardNo: function(idCardNo) {
+  checkIdCardNo: function (idCardNo) {
     //检查身份证号码
     var result = this.getIdCardNoCheckInfo(idCardNo)
 
@@ -1665,7 +1665,8 @@ function amountFormat0(value, dLength, cLength) {
 
 //判断是否是手机浏览器
 function isPhone() {
-  var reg = /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+  var reg =
+    /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
   return window.navigator.userAgent.match(reg) ? true : false
 }
 
@@ -1681,16 +1682,23 @@ function isSafari() {
   return window.navigator.userAgent.match(reg) ? true : false
 }
 
+//判断是否是钉钉浏览器
+function isDingTalk() {
+  var reg = /(DingTalk)/i
+  return window.navigator.userAgent.match(reg) ? true : false
+}
+
 //判断设备跳转不同地址
 function goPage(moHref, pcHref) {
-  var reg = /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+  var reg =
+    /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
 
   window.location.href = navigator.userAgent.match(reg) ? moHref : pcHref
 }
 
 //cookie操作
 var cookie = {
-  set: function(key, value, sec) {
+  set: function (key, value, sec) {
     var value = value
     var sec = sec || 60 * 60 * 24 * 30
     var type = Type(value)
@@ -1706,7 +1714,7 @@ var cookie = {
     oDate = oDate.toGMTString()
     document.cookie = key + '=' + encodeURIComponent(value) + ';expires=' + oDate
   },
-  get: function(key) {
+  get: function (key) {
     var str = document.cookie
     var reg = new RegExp('(^|(;\\s))' + key + '=([^;\\s]+)((;\\s)|$)')
     var result = str.match(reg)
@@ -1717,7 +1725,7 @@ var cookie = {
     } catch (e) {}
     return result
   },
-  getKeys: function() {
+  getKeys: function () {
     var str = document.cookie
     var reg1 = /\=+/g
     var reg2 = /(\;|[\;\s])+/g
@@ -1735,7 +1743,7 @@ var cookie = {
     } catch (e) {}
     return str
   },
-  getAll: function() {
+  getAll: function () {
     var json = {}
     var keys = this.getKeys()
 
@@ -1744,14 +1752,14 @@ var cookie = {
     }
     return json
   },
-  remove: function(key) {
+  remove: function (key) {
     var oDate = new Date()
 
     oDate.setDate(oDate.getDate() - 1)
     oDate = oDate.toGMTString()
     document.cookie = key + '=;expires=' + oDate
   },
-  clear: function() {
+  clear: function () {
     var keys = this.getKeys()
 
     for (var attr in keys) {
@@ -1761,15 +1769,15 @@ var cookie = {
 }
 
 //创建Store对象(增强localStorage或sessionStorage，直接存取对象或者数组)
-var Store = function() {
+var Store = function () {
   this.name = 'Store'
 }
 Store.prototype = {
-  init: function(type) {
+  init: function (type) {
     this.store = window[type]
     return this
   },
-  set: function(key, value) {
+  set: function (key, value) {
     var type = Type(value)
 
     switch (type) {
@@ -1781,7 +1789,7 @@ Store.prototype = {
         this.store.setItem(key, value)
     }
   },
-  get: function(key) {
+  get: function (key) {
     var value = this.store.getItem(key)
 
     try {
@@ -1790,7 +1798,7 @@ Store.prototype = {
 
     return value
   },
-  getAll: function() {
+  getAll: function () {
     var store = copyJson(this.store)
     var json = {}
     var value = ''
@@ -1804,10 +1812,10 @@ Store.prototype = {
     }
     return json
   },
-  remove: function(key) {
+  remove: function (key) {
     this.store.removeItem(key)
   },
-  clear: function() {
+  clear: function () {
     this.store.clear()
   },
 }
@@ -1874,12 +1882,12 @@ function getSearch(key, str) {
 function antiShake(fn, msec) {
   var timer = null
 
-  return function() {
+  return function () {
     var This = this
     var Arguments = arguments
 
     clearTimeout(timer)
-    timer = setTimeout(function() {
+    timer = setTimeout(function () {
       fn.apply(This, Arguments)
     }, msec || 300)
   }
@@ -1902,7 +1910,7 @@ function throttle(fn, msec) {
   var timer = null
   var first = true
 
-  return function() {
+  return function () {
     var This = this
     var Arguments = arguments
 
@@ -1910,7 +1918,7 @@ function throttle(fn, msec) {
       first = false
       fn.apply(This, Arguments)
     } else if (!timer) {
-      timer = setTimeout(function() {
+      timer = setTimeout(function () {
         clearTimeout(timer)
         timer = null
         fn.apply(This, Arguments)
@@ -1948,11 +1956,11 @@ function alerts(str, msec, noMask) {
     document.body.appendChild(oWrap)
   }
 
-  setTimeout(function() {
+  setTimeout(function () {
     oWrap.style.opacity = 0
   }, msec / 2)
 
-  setTimeout(function() {
+  setTimeout(function () {
     if (!noMask) {
       document.body.removeChild(oMask)
     } else {
@@ -2163,10 +2171,10 @@ function preload(arr, endFn) {
     newimages[i] = new Image()
     newimages[i].crossOrigin = 'anonymous'
     newimages[i].src = arr[i]
-    newimages[i].onload = function() {
+    newimages[i].onload = function () {
       loadOver()
     }
-    newimages[i].onerror = function() {
+    newimages[i].onerror = function () {
       loadOver()
     }
   }
@@ -2299,7 +2307,7 @@ function selectText(endFn) {
       rangeObj: rangeObj, //range对象
       text: text, //选中的文字
       html: html, //选中的html
-      wrapTag: function(tagName, insert, objStyle, objProperty, objAttribute) {
+      wrapTag: function (tagName, insert, objStyle, objProperty, objAttribute) {
         //给选中的内容包裹一个标签（并选中）
         var tagName = tagName || 'span'
         var objStyle = objStyle || {}
@@ -2341,7 +2349,7 @@ function selectText(endFn) {
           execCommandFn('4_1', oDiv.innerHTML)
         }
       },
-      getNodeList: function(parent) {
+      getNodeList: function (parent) {
         //获取选中的文本类型的node
         if (!parent) return []
         var nodeList = []
@@ -2363,7 +2371,7 @@ function selectText(endFn) {
         getNodeListFn(parent)
         return nodeList
       },
-      getCssText: function(parent) {
+      getCssText: function (parent) {
         //获取元素以及所有后代的cssText并解析成json
         if (!parent) return {}
         var result = {}
@@ -2422,7 +2430,7 @@ function onPaste(obj, endFn) {
         itemJson.type = item.kind
         switch (item.kind) {
           case 'string':
-            item.getAsString(function(text) {
+            item.getAsString(function (text) {
               itemJson.text = text
             })
             break
@@ -2447,11 +2455,11 @@ function imgFilesToBase64(files, endFn) {
     var oReader = new FileReader(file)
 
     oReader.readAsDataURL(file)
-    oReader.onload = function() {
+    oReader.onload = function () {
       var oImg = new Image()
 
       oImg.src = oReader.result
-      oImg.onload = function() {
+      oImg.onload = function () {
         var windowUrl = window.URL || window.webkitURL
 
         result.push({
@@ -2518,7 +2526,7 @@ function webviewRefresh() {
   rPath = pathname + search + hash
 
   window.location.reload()
-  setTimeout(function() {
+  setTimeout(function () {
     window.location.replace(rPath)
   }, 300)
 }
@@ -2535,20 +2543,20 @@ function hasPrevHistoryPage() {
   var historyArr = sStore.get('hasPrevHistoryPageHistoryArr') || []
   var historyLength = sStore.get('hasPrevHistoryPageHistoryLength') || []
 
-  window.onunload = function() {
+  window.onunload = function () {
     sStore.set('hasPrevHistoryPageHistoryArr', historyArr)
     sStore.set('hasPrevHistoryPageHistoryLength', historyLength)
   }
 
   return {
-    record: function() {
+    record: function () {
       function getPage(number) {
         var index = historyLength.indexOf(number)
 
         return index != -1 ? historyArr[index] : ''
       }
 
-      setTimeout(function() {
+      setTimeout(function () {
         var href = window.location.href
         var length = window.history.length
 
@@ -2581,14 +2589,14 @@ function hasPrevHistoryPage() {
         }
       })
     },
-    ableGoBack: function(endFn) {
+    ableGoBack: function (endFn) {
       function getPage(number) {
         var index = historyLength.indexOf(number)
 
         return index != -1 ? historyArr[index] : ''
       }
 
-      setTimeout(function() {
+      setTimeout(function () {
         var bool = true
         var length = window.history.length
 
@@ -2631,7 +2639,7 @@ function controlBodyScroll(disableScroll, goTop) {
 
   if (goTop) {
     oHtml.scrollTop = oBody.scrollTop = 0
-    setTimeout(function() {
+    setTimeout(function () {
       oHtml.scrollTop = oBody.scrollTop = 0
     })
   }
@@ -2652,7 +2660,7 @@ function getPasteFile(ev, callback) {
     if (items[0].kind != 'file') return console.log('请粘贴文件')
     var file = items[0].getAsFile()
     reader.readAsDataURL(file)
-    reader.onload = function() {
+    reader.onload = function () {
       callback && callback(file)
     }
   }
@@ -2665,7 +2673,7 @@ function getPasteFile(ev, callback) {
   'Loading chunk chunk-04db3957 failed.\n(missing: http://forward-front-forward-v1.projectk8s.tsign.cn/static/js/chunk-04db3957.1ff745b6.js)'
 */
 function LoadingChunkErrorReload(router) {
-  router.onError(function(error) {
+  router.onError(function (error) {
     var reg = /Loading chunk.+failed/i
     var message = error.message || error
     var isChunkLoadFailed = reg.test(message)
@@ -2727,6 +2735,7 @@ export {
   isPhone,
   isWeixin,
   isSafari,
+  isDingTalk,
   goPage,
   cookie,
   lStore,
