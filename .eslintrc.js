@@ -1,7 +1,7 @@
 module.exports = {
   root: true,
   parserOptions: {
-    parser: 'babel-eslint',
+    parser: '@babel/eslint-parser',
     sourceType: 'module',
   },
   env: {
@@ -12,8 +12,9 @@ module.exports = {
   extends: ['plugin:vue/recommended', 'eslint:recommended'],
 
   // add your custom rules here
-  //it is base on https://github.com/vuejs/eslint-config-vue
+  // it is base on https://github.com/vuejs/eslint-config-vue
   rules: {
+    'vue/multi-word-component-names': 0,
     'vue/max-attributes-per-line': 0,
     'vue/singleline-html-element-content-newline': 0,
     'vue/multiline-html-element-content-newline': 0,
@@ -26,12 +27,8 @@ module.exports = {
         multiline: 'always',
       },
     ],
-    'vue/html-self-closing': [
-      'error',
-      {
-        html: { normal: 'never', void: 'always' },
-      },
-    ],
+    'vue/html-self-closing': 0,
+    'vue/no-lone-template': 0,
     'accessor-pairs': 2,
     'arrow-spacing': [
       2,
@@ -40,7 +37,7 @@ module.exports = {
         after: true,
       },
     ],
-    'arrow-parens': [2, 'as-needed'],
+    'arrow-parens': [2, 'always'],
     'block-spacing': [2, 'always'],
     'brace-style': [
       2,
