@@ -40,6 +40,7 @@ module.exports = {
         after: true,
       },
     ],
+    'arrow-parens': [2, 'as-needed'],
     'block-spacing': [2, 'always'],
     'brace-style': [
       2,
