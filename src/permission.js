@@ -16,8 +16,8 @@ const { code, state } = strToJson
 const params = sStore.get('dingCode') ? {} : { code, state }
 let requested = false
 const buttonList = []
-const getAsyncRoutes = menuTree => {
-  const getRoute = item => {
+const getAsyncRoutes = (menuTree) => {
+  const getRoute = (item) => {
     const { name: title, url: path, enable } = item
     const route = routerJson[path]
     const { name, component, meta, redirect } = route || {}
@@ -33,7 +33,7 @@ const getAsyncRoutes = menuTree => {
   }
   const getRoutes = (list = []) => {
     const menuList = []
-    list.forEach(item => {
+    list.forEach((item) => {
       if (item.resourceType == 'MENU') {
         menuList.push(item)
       } else if (item.resourceType == 'BUTTON') {
@@ -41,7 +41,7 @@ const getAsyncRoutes = menuTree => {
       }
     })
     if (!list.length) return []
-    const resultList = menuList.map(item => {
+    const resultList = menuList.map((item) => {
       const { resources } = item
       const parent = getRoute(item)
       if (resources) {
@@ -62,16 +62,16 @@ const getAsyncRoutes = menuTree => {
   router.addRoutes(routes)
   return routes
 }
-const getPersonsJson = res => {
+const getPersonsJson = (res) => {
   let persons = res?.data?.persons
   const accountPersonsJson = {}
   const namePersonsJson = {}
-  const getName = item => {
+  const getName = (item) => {
     const { alias, name, status } = item
     return `${alias}-${name}${status == 1 ? '（已离职）' : ''}`
   }
   if (persons) {
-    persons = persons.map(item => {
+    persons = persons.map((item) => {
       const { account, alias, name } = item
       const fullName = getName(item)
       const resultItem = { account, alias, name, fullName }
@@ -86,12 +86,12 @@ const getPersonsJson = res => {
     namePersonsJson,
   }
 }
-const getGroupListTreeFlat = groupListTree => {
+const getGroupListTreeFlat = (groupListTree) => {
   const groupListTreeFlat = []
   const groupListTreeFlatFilter = []
   const getGroupListTreeFlat = (children, nameList = []) => {
     if (!children || !children.length) return
-    children.forEach(item => {
+    children.forEach((item) => {
       const { childNode: nextChildren, depth, groupId, groupName, deleteFlag } = item
       const nextNameList = [...nameList]
       if (depth > 1) {
@@ -123,7 +123,7 @@ router.beforeEach(async (to, from, next) => {
   // start progress bar
   document.title = getPageTitle(to?.meta?.title ?? '')
   NProgress.start()
-  if (Vue.prototype.$httpRequestList.length) {
+  if (Vue.prototype.$httpRequestList.length && to.path !== from.path) {
     while (Vue.prototype.$httpRequestList.length) {
       Vue.prototype.$httpRequestList.shift()('interrupt')
     }
